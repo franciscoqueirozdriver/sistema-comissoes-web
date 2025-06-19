@@ -1,5 +1,5 @@
 
-const API_URL = 'https://script.google.com/macros/s/SEU_CODIGO/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwKWUAjJS0asrpKS5GKyDkk_UZ1kRAqAwQrwY-c2WEJM9LEX8agrNnmeSxv6t_dgomJgi/exec';
 
 function toggleDarkMode() {
   document.documentElement.classList.toggle('dark');

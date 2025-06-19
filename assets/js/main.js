@@ -1,5 +1,5 @@
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbwKWUAjJS0asrpKS5GKyDkk_UZ1kRAqAwQrwY-c2WEJM9LEX8agrNnmeSxv6t_dgomJgi/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbz3GRwicPJNqaztRDQFtmbQHd2G8hPZBatyvvnYCNszjj-ZVJwl7e9YuOqqPBozZTVT1g/exec';
 
 function toggleDarkMode() {
   document.documentElement.classList.toggle('dark');

@@ -1,26 +1,13 @@
 
-body { transition: background-color 0.3s; }
-.card {
-  background-color: white;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+body {
+  font-family: sans-serif;
 }
-body.dark .card {
-  background-color: #1f2937;
+.card {
+  @apply bg-white dark:bg-gray-800 p-4 rounded shadow;
 }
 .value {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #7c3aed;
+  @apply text-2xl font-bold text-violet-600;
 }
 .select {
-  border: 1px solid #ccc;
-  border-radius: 0.25rem;
-  padding: 0.25rem 0.5rem;
-  background-color: white;
-}
-body.dark .select {
-  background-color: #374151;
-  color: white;
+  @apply border rounded px-2 py-1;
 }

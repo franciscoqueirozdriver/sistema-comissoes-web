@@ -25,25 +25,27 @@ async function carregarDashboard() {
   let totalPrevisto = 0;
 
   pagamentos.slice(1).forEach(l => {
-    const data = new Date(l[8]);
+    const data = new Date(l[7]);
     const status = l[9];
     const valor = parseFloat(l[4]);
     const tipo = l[2];
 
     if (!isNaN(data) && data.getFullYear() === anoSelecionado) {
       const mes = data.getMonth();
-      if (status === 'Recebido') {
-        realizado[mes] += valor;
-        totalRecebido += valor;
-      } else {
-        totalPrevisto += valor;
+      if (tipoSelecionado === 'Todos' || tipo === tipoSelecionado) {
+        if (status === 'Recebido') {
+          realizado[mes] += valor;
+          totalRecebido += valor;
+        } else {
+          totalPrevisto += valor;
+        }
       }
     }
   });
 
   document.getElementById('cardRecebido').innerText = `R$ ${totalRecebido.toLocaleString()}`;
   document.getElementById('cardPrevisto').innerText = `R$ ${totalPrevisto.toLocaleString()}`;
-  const percentual = totalPrevisto > 0 ? Math.round((totalRecebido / (totalRecebido + totalPrevisto)) * 100) : 100;
+  const percentual = (totalRecebido + totalPrevisto) > 0 ? Math.round((totalRecebido / (totalRecebido + totalPrevisto)) * 100) : 100;
   document.getElementById('cardRealizado').innerText = `${percentual}%`;
 
   const ctx = document.getElementById('graficoComissoes').getContext('2d');
@@ -72,9 +74,7 @@ async function carregarDashboard() {
     options: {
       responsive: true,
       scales: {
-        y: {
-          beginAtZero: true
-        }
+        y: { beginAtZero: true }
       }
     }
   });

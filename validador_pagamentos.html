@@ -1,1 +1,29 @@
-<!-- Conteúdo do validador_pagamentos.html -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de API - Pagamentos</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Validador de API - Aba Pagamentos</h1>
+    <div id="output">Carregando...</div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/SEU_ID/exec';
+
+        async function carregarDados() {
+            try {
+                const res = await axios.get(`${API_URL}?sheet=Pagamentos`);
+                document.getElementById('output').innerText = JSON.stringify(res.data, null, 2);
+            } catch (error) {
+                document.getElementById('output').innerText = 'Erro ao carregar dados.';
+            }
+        }
+
+        carregarDados();
+    </script>
+</body>
+</html>

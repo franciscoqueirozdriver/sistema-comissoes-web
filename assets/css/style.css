@@ -1,13 +1,1 @@
-
-body {
-  font-family: sans-serif;
-}
-.card {
-  @apply bg-white dark:bg-gray-800 p-4 rounded shadow;
-}
-.value {
-  @apply text-2xl font-bold text-violet-600;
-}
-.select {
-  @apply border rounded px-2 py-1;
-}
+/* CSS personalizado */

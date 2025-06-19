@@ -1,6 +1,26 @@
-body { font-family: Arial, sans-serif; background-color: #f3f4f6; margin: 0; padding: 0; }
-header { background: white; padding: 10px 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-nav ul { list-style: none; display: flex; gap: 20px; padding: 0; }
-nav a { text-decoration: none; color: #2563eb; }
-main { padding: 20px; }
-footer { background: white; padding: 10px; text-align: center; box-shadow: 0 -2px 4px rgba(0,0,0,0.1); }
+
+body { transition: background-color 0.3s; }
+.card {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+body.dark .card {
+  background-color: #1f2937;
+}
+.value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #7c3aed;
+}
+.select {
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background-color: white;
+}
+body.dark .select {
+  background-color: #374151;
+  color: white;
+}

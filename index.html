@@ -1,45 +1,65 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Comissões</title>
-  <link rel="stylesheet" href="assets/css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-  <header>
-    <h1>Sistema de Comissões</h1>
-    <nav>
-      <ul>
-        <li><a href="#oportunidades">Oportunidades</a></li>
-        <li><a href="#pagamentos">Pagamentos</a></li>
-        <li><a href="#painel">Painel</a></li>
-        <li><a href="#despesas">Despesas/Receitas</a></li>
-      </ul>
-    </nav>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+  <header class="bg-white dark:bg-gray-800 shadow p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-violet-600">Sistema de Comissões</h1>
+    <div class="flex items-center gap-4">
+      <nav>
+        <ul class="flex space-x-4">
+          <li><a href="#oportunidades" class="hover:underline">Oportunidades</a></li>
+          <li><a href="#pagamentos" class="hover:underline">Pagamentos</a></li>
+          <li><a href="#painel" class="hover:underline">Painel</a></li>
+          <li><a href="#despesas" class="hover:underline">Despesas/Receitas</a></li>
+        </ul>
+      </nav>
+      <button onclick="toggleDarkMode()" class="bg-violet-500 text-white px-2 py-1 rounded">Dark Mode</button>
+    </div>
   </header>
-  <main>
-    <section id="painel">
-      <h2>Painel (Dashboard)</h2>
-      <label for="anoSelect">Ano:</label>
-      <select id="anoSelect">
-        <option value="2024">2024</option>
-        <option value="2025" selected>2025</option>
-      </select>
-      <label for="tipoSelect">Tipo:</label>
-      <select id="tipoSelect">
-        <option value="Todos">Todos</option>
-        <option value="Implantação">Implantação</option>
-        <option value="Mensalidade">Mensalidade</option>
-      </select>
-      <canvas id="graficoComissoes"></canvas>
+
+  <main class="p-6">
+    <section id="painel" class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Painel (Dashboard)</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="card"><p class="text-sm text-gray-500">Recebido</p><p id="cardRecebido" class="value">R$ 0</p></div>
+        <div class="card"><p class="text-sm text-gray-500">Previsto</p><p id="cardPrevisto" class="value">R$ 0</p></div>
+        <div class="card"><p class="text-sm text-gray-500">% Realizado</p><p id="cardRealizado" class="value">0%</p></div>
+      </div>
+
+      <div class="flex gap-4 mb-4">
+        <label for="anoSelect">Ano:</label>
+        <select id="anoSelect" class="select">
+          <option value="2024">2024</option>
+          <option value="2025" selected>2025</option>
+        </select>
+        <label for="tipoSelect">Tipo:</label>
+        <select id="tipoSelect" class="select">
+          <option value="Todos">Todos</option>
+          <option value="Implantação">Implantação</option>
+          <option value="Mensalidade">Mensalidade</option>
+        </select>
+      </div>
+
+      <div class="bg-white dark:bg-gray-800 p-4 rounded shadow">
+        <canvas id="graficoComissoes"></canvas>
+      </div>
     </section>
   </main>
-  <footer>
-    <p>&copy; 2025 Sistema de Comissões. Todos os direitos reservados.</p>
+
+  <footer class="bg-white dark:bg-gray-800 shadow p-4 text-center">
+    <p class="text-sm text-gray-500">&copy; 2025 Sistema de Comissões. Todos os direitos reservados.</p>
   </footer>
+
   <script src="assets/js/main.js"></script>
 </body>
 </html>

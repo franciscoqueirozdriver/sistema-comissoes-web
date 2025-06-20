@@ -1,4 +1,4 @@
-// 🔗 Configure aqui o link da sua API
+// 🔗 Configure o link da sua API:
 const API_URL = 'https://script.google.com/macros/s/AKfycbyyK01zS9CGJdb0ONaHcUAXp3Cp4Tz4BB5Hp85FdJxjx3zK4qZm7WGG4YzH3ugT5IE/exec';
 
 // ✅ Dark Mode
@@ -6,7 +6,7 @@ function toggleDarkMode() {
   document.documentElement.classList.toggle('dark');
 }
 
-// ✅ Funções Genéricas da API
+// ✅ Funções da API
 async function apiGet(sheet) {
   const res = await fetch(`${API_URL}?sheet=${sheet}`);
   return await res.json();
@@ -26,7 +26,7 @@ async function apiDelete(sheet, id) {
   });
 }
 
-// ✅ Função de Dashboard
+// ✅ Dashboard
 async function carregarDashboard() {
   const pagamentos = await apiGet('Pagamentos');
   const configuracoes = await apiGet('Configuracoes');
@@ -89,7 +89,7 @@ async function renderOportunidades() {
       <td>${o[2]}</td>
       <td>${o[3]}</td>
       <td>
-        <button class="btn" onclick="editarOportunidade(${o[0]})">✏️ Editar</button>
+        <button class="btn" onclick="editarOportunidade(${o[0]}, '${o[1]}', '${o[2]}', '${o[3]}')">✏️ Editar</button>
         <button class="btn btn-danger" onclick="deletarOportunidade(${o[0]})">🗑️ Excluir</button>
       </td>
     </tr>
@@ -106,9 +106,41 @@ async function renderOportunidades() {
 }
 
 function novaOportunidade() {
-  const empresa = prompt('Empresa:');
-  const fonte = prompt('Fonte:');
-  const fase = prompt('Fase do Funil:');
+  document.getElementById('app').innerHTML = `
+    <h2 class="text-xl font-semibold mb-4">Nova Oportunidade</h2>
+    <div class="form-group">
+      <label>Empresa</label>
+      <input id="empresa" type="text">
+    </div>
+    <div class="form-group">
+      <label>Fonte</label>
+      <select id="fonte">
+        <option value="Inbound">Inbound</option>
+        <option value="Outbound">Outbound</option>
+        <option value="Indicação">Indicação</option>
+        <option value="Eventos">Eventos</option>
+        <option value="Contato Próprio">Contato Próprio</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Fase do Funil</label>
+      <select id="fase">
+        <option value="Proposta comercial">Proposta comercial</option>
+        <option value="Negociação da proposta">Negociação da proposta</option>
+        <option value="Negociação contratual">Negociação contratual</option>
+        <option value="Ganho">Ganho</option>
+        <option value="Perdido">Perdido</option>
+      </select>
+    </div>
+    <button class="btn" onclick="salvarNovaOportunidade()">💾 Salvar</button>
+    <button class="btn btn-danger" onclick="renderOportunidades()">Cancelar</button>
+  `;
+}
+
+function salvarNovaOportunidade() {
+  const empresa = document.getElementById('empresa').value;
+  const fonte = document.getElementById('fonte').value;
+  const fase = document.getElementById('fase').value;
 
   apiPost('Oportunidades', {
     id: '',
@@ -118,10 +150,42 @@ function novaOportunidade() {
   }).then(() => renderOportunidades());
 }
 
-function editarOportunidade(id) {
-  const empresa = prompt('Empresa:');
-  const fonte = prompt('Fonte:');
-  const fase = prompt('Fase do Funil:');
+function editarOportunidade(id, empresa, fonte, fase) {
+  document.getElementById('app').innerHTML = `
+    <h2 class="text-xl font-semibold mb-4">Editar Oportunidade</h2>
+    <div class="form-group">
+      <label>Empresa</label>
+      <input id="empresa" type="text" value="${empresa}">
+    </div>
+    <div class="form-group">
+      <label>Fonte</label>
+      <select id="fonte">
+        <option ${fonte === 'Inbound' ? 'selected' : ''}>Inbound</option>
+        <option ${fonte === 'Outbound' ? 'selected' : ''}>Outbound</option>
+        <option ${fonte === 'Indicação' ? 'selected' : ''}>Indicação</option>
+        <option ${fonte === 'Eventos' ? 'selected' : ''}>Eventos</option>
+        <option ${fonte === 'Contato Próprio' ? 'selected' : ''}>Contato Próprio</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Fase do Funil</label>
+      <select id="fase">
+        <option ${fase === 'Proposta comercial' ? 'selected' : ''}>Proposta comercial</option>
+        <option ${fase === 'Negociação da proposta' ? 'selected' : ''}>Negociação da proposta</option>
+        <option ${fase === 'Negociação contratual' ? 'selected' : ''}>Negociação contratual</option>
+        <option ${fase === 'Ganho' ? 'selected' : ''}>Ganho</option>
+        <option ${fase === 'Perdido' ? 'selected' : ''}>Perdido</option>
+      </select>
+    </div>
+    <button class="btn" onclick="salvarEdicaoOportunidade(${id})">💾 Salvar</button>
+    <button class="btn btn-danger" onclick="renderOportunidades()">Cancelar</button>
+  `;
+}
+
+function salvarEdicaoOportunidade(id) {
+  const empresa = document.getElementById('empresa').value;
+  const fonte = document.getElementById('fonte').value;
+  const fase = document.getElementById('fase').value;
 
   apiPost('Oportunidades', {
     id,
@@ -132,48 +196,8 @@ function editarOportunidade(id) {
 }
 
 function deletarOportunidade(id) {
-  if (confirm('Deseja realmente excluir?')) {
+  if (confirm('Deseja excluir?')) {
     apiDelete('Oportunidades', id).then(() => renderOportunidades());
-  }
-}
-
-// ✅ CRUD de Pagamentos
-async function renderPagamentos() {
-  const data = await apiGet('Pagamentos');
-  const linhas = data.slice(1).map(p => `
-    <tr>
-      <td>${p[0]}</td>
-      <td>${p[1]}</td>
-      <td>${p[2]}</td>
-      <td>${p[4]}</td>
-      <td>${p[7]}</td>
-      <td>${p[9]}</td>
-      <td>
-        <button class="btn" onclick="marcarRecebido(${p[0]})">✔️ Receber</button>
-        <button class="btn btn-danger" onclick="deletarPagamento(${p[0]})">🗑️ Excluir</button>
-      </td>
-    </tr>
-  `).join('');
-
-  document.getElementById('app').innerHTML = `
-    <h2 class="text-xl font-semibold mb-4">Pagamentos</h2>
-    <table>
-      <thead><tr><th>ID</th><th>Empresa</th><th>Tipo</th><th>Valor</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead>
-      <tbody>${linhas}</tbody>
-    </table>
-  `;
-}
-
-function marcarRecebido(id) {
-  apiPost('Pagamentos', {
-    id,
-    status: 'Recebido'
-  }).then(() => renderPagamentos());
-}
-
-function deletarPagamento(id) {
-  if (confirm('Deseja excluir o pagamento?')) {
-    apiDelete('Pagamentos', id).then(() => renderPagamentos());
   }
 }
 
@@ -221,6 +245,46 @@ function novaDespesa() {
 function deletarDespesa(id) {
   if (confirm('Deseja excluir a despesa?')) {
     apiDelete('Despesas', id).then(() => renderDespesas());
+  }
+}
+
+// ✅ CRUD de Pagamentos
+async function renderPagamentos() {
+  const data = await apiGet('Pagamentos');
+  const linhas = data.slice(1).map(p => `
+    <tr>
+      <td>${p[0]}</td>
+      <td>${p[1]}</td>
+      <td>${p[2]}</td>
+      <td>${p[4]}</td>
+      <td>${p[7]}</td>
+      <td>${p[9]}</td>
+      <td>
+        <button class="btn" onclick="marcarRecebido(${p[0]})">✔️ Receber</button>
+        <button class="btn btn-danger" onclick="deletarPagamento(${p[0]})">🗑️ Excluir</button>
+      </td>
+    </tr>
+  `).join('');
+
+  document.getElementById('app').innerHTML = `
+    <h2 class="text-xl font-semibold mb-4">Pagamentos</h2>
+    <table>
+      <thead><tr><th>ID</th><th>Empresa</th><th>Tipo</th><th>Valor</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead>
+      <tbody>${linhas}</tbody>
+    </table>
+  `;
+}
+
+function marcarRecebido(id) {
+  apiPost('Pagamentos', {
+    id,
+    status: 'Recebido'
+  }).then(() => renderPagamentos());
+}
+
+function deletarPagamento(id) {
+  if (confirm('Deseja excluir o pagamento?')) {
+    apiDelete('Pagamentos', id).then(() => renderPagamentos());
   }
 }
 

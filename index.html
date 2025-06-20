@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -5,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Comissões</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -16,10 +16,10 @@
     <div class="flex items-center gap-4">
       <nav>
         <ul class="flex space-x-4">
-          <li><a href="#oportunidades" class="hover:underline">Oportunidades</a></li>
-          <li><a href="#pagamentos" class="hover:underline">Pagamentos</a></li>
-          <li><a href="#painel" class="hover:underline">Painel</a></li>
-          <li><a href="#despesas" class="hover:underline">Despesas/Receitas</a></li>
+          <li><a href="#oportunidades" onclick="renderOportunidades()" class="hover:underline">Oportunidades</a></li>
+          <li><a href="#pagamentos" onclick="renderPagamentos()" class="hover:underline">Pagamentos</a></li>
+          <li><a href="#painel" onclick="carregarDashboard()" class="hover:underline">Painel</a></li>
+          <li><a href="#despesas" onclick="renderDespesas()" class="hover:underline">Despesas/Receitas</a></li>
         </ul>
       </nav>
       <button onclick="toggleDarkMode()" class="bg-violet-500 text-white px-2 py-1 rounded">Dark Mode</button>
@@ -27,7 +27,12 @@
   </header>
 
   <main class="p-6" id="app">
-    <!-- Conteúdo dinâmico carregado via JavaScript -->
+    <section id="painel" class="mb-12">
+      <h2 class="text-xl font-semibold mb-4">Painel (Dashboard)</h2>
+      <div class="bg-white dark:bg-gray-800 p-4 rounded shadow">
+        <canvas id="graficoComissoes"></canvas>
+      </div>
+    </section>
   </main>
 
   <footer class="bg-white dark:bg-gray-800 shadow p-4 text-center">

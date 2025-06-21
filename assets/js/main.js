@@ -1,9 +1,12 @@
-const API_URL = 'https://script.google.com/macros/s/AKfycbyyK01zS9CGJdb0ONaHcUAXp3Cp4Tz4BB5Hp85FdJxjx3zK4qZm7WGG4YzH3ugT5IE/exec';
+// 🔗 API
+const API_URL = 'https://SEU_LINK_DA_API/exec';
 
+// 🔥 Dark Mode
 function toggleDarkMode() {
   document.documentElement.classList.toggle('dark');
 }
 
+// 🚀 Funções API
 async function apiGet(sheet) {
   const res = await fetch(`${API_URL}?sheet=${sheet}`);
   return await res.json();
@@ -23,14 +26,10 @@ async function apiDelete(sheet, id) {
   });
 }
 
-function renderDashboard() {
+// 🏠 Dashboard
+async function renderDashboard() {
   document.getElementById('app').innerHTML = `
     <h2 class="text-xl font-semibold mb-4">Dashboard</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <div class="card"><p class="text-sm text-gray-500">Recebido</p><p id="cardRecebido" class="value">R$ 0</p></div>
-      <div class="card"><p class="text-sm text-gray-500">Previsto</p><p id="cardPrevisto" class="value">R$ 0</p></div>
-      <div class="card"><p class="text-sm text-gray-500">% Realizado</p><p id="cardRealizado" class="value">0%</p></div>
-    </div>
     <canvas id="graficoComissoes"></canvas>
   `;
   carregarDashboard();
@@ -40,10 +39,10 @@ async function carregarDashboard() {
   const pagamentos = await apiGet('Pagamentos');
   const configuracoes = await apiGet('Configuracoes');
 
-  const orcado = parseFloat(configuracoes.find(c => c[0] === 'Orcado Mensal')?.[1]) || 8000;
-
+  const orcado = parseFloat(configuracoes.find(c => c[0] === 'Orcado Mensal')[1]) || 8000;
   const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
   const realizado = new Array(12).fill(0);
+  const previsto = new Array(12).fill(orcado);
 
   pagamentos.slice(1).forEach(p => {
     const data = new Date(p[7]);
@@ -57,19 +56,8 @@ async function carregarDashboard() {
     }
   });
 
-  const totalRecebido = realizado.reduce((a, b) => a + b, 0);
-  const totalPrevisto = orcado * 12;
-  const percentual = totalPrevisto > 0 ? Math.round((totalRecebido / totalPrevisto) * 100) : 0;
-
-  document.getElementById('cardRecebido').innerText = `R$ ${totalRecebido.toLocaleString()}`;
-  document.getElementById('cardPrevisto').innerText = `R$ ${totalPrevisto.toLocaleString()}`;
-  document.getElementById('cardRealizado').innerText = `${percentual}%`;
-
   const ctx = document.getElementById('graficoComissoes').getContext('2d');
-  if (window.grafico) {
-    window.grafico.destroy();
-  }
-  window.grafico = new Chart(ctx, {
+  new Chart(ctx, {
     type: 'bar',
     data: {
       labels: meses,
@@ -82,7 +70,7 @@ async function carregarDashboard() {
         {
           type: 'line',
           label: 'Orçado',
-          data: new Array(12).fill(orcado),
+          data: previsto,
           borderColor: 'rgba(139, 92, 246, 1)',
           borderWidth: 2,
           fill: false
@@ -98,6 +86,85 @@ async function carregarDashboard() {
   });
 }
 
-window.addEventListener('load', () => {
-  renderDashboard();
-});
+// 🎯 CRUD Oportunidades com Formulário
+async function renderOportunidades() {
+  const data = await apiGet('Oportunidades');
+  const linhas = data.slice(1).map(o => `
+    <tr>
+      <td>${o[0]}</td>
+      <td>${o[1]}</td>
+      <td>${o[2]}</td>
+      <td>${o[3]}</td>
+      <td>
+        <button class="btn" onclick="editarOportunidade(${o[0]}, '${o[1]}', '${o[2]}', '${o[3]}')">✏️ Editar</button>
+        <button class="btn btn-danger" onclick="deletarOportunidade(${o[0]})">🗑️ Excluir</button>
+      </td>
+    </tr>
+  `).join('');
+
+  document.getElementById('app').innerHTML = `
+    <h2 class="text-xl font-semibold mb-4">Oportunidades</h2>
+    <button class="btn mb-4" onclick="novaOportunidade()">+ Nova Oportunidade</button>
+    <table class="w-full table-auto border">
+      <thead><tr><th>ID</th><th>Empresa</th><th>Fonte</th><th>Fase</th><th>Ações</th></tr></thead>
+      <tbody>${linhas}</tbody>
+    </table>
+  `;
+}
+
+function novaOportunidade() {
+  document.getElementById('app').innerHTML = `
+    <h2 class="text-xl mb-4">Nova Oportunidade</h2>
+    <div class="grid gap-4">
+      <input type="text" id="empresa" placeholder="Empresa">
+      <input type="text" id="fonte" placeholder="Fonte">
+      <input type="text" id="fase" placeholder="Fase do Funil">
+      <div class="flex gap-2">
+        <button class="btn" onclick="salvarNovaOportunidade()">Salvar</button>
+        <button class="btn btn-danger" onclick="renderOportunidades()">Cancelar</button>
+      </div>
+    </div>
+  `;
+}
+
+function salvarNovaOportunidade() {
+  const empresa = document.getElementById('empresa').value;
+  const fonte = document.getElementById('fonte').value;
+  const fase = document.getElementById('fase').value;
+
+  apiPost('Oportunidades', { id: '', empresa, fonte, fase })
+    .then(() => renderOportunidades());
+}
+
+function editarOportunidade(id, empresa, fonte, fase) {
+  document.getElementById('app').innerHTML = `
+    <h2 class="text-xl mb-4">Editar Oportunidade</h2>
+    <div class="grid gap-4">
+      <input type="text" id="empresa" value="${empresa}" placeholder="Empresa">
+      <input type="text" id="fonte" value="${fonte}" placeholder="Fonte">
+      <input type="text" id="fase" value="${fase}" placeholder="Fase do Funil">
+      <div class="flex gap-2">
+        <button class="btn" onclick="salvarEdicaoOportunidade(${id})">Salvar</button>
+        <button class="btn btn-danger" onclick="renderOportunidades()">Cancelar</button>
+      </div>
+    </div>
+  `;
+}
+
+function salvarEdicaoOportunidade(id) {
+  const empresa = document.getElementById('empresa').value;
+  const fonte = document.getElementById('fonte').value;
+  const fase = document.getElementById('fase').value;
+
+  apiPost('Oportunidades', { id, empresa, fonte, fase })
+    .then(() => renderOportunidades());
+}
+
+function deletarOportunidade(id) {
+  if (confirm('Deseja realmente excluir essa oportunidade?')) {
+    apiDelete('Oportunidades', id).then(() => renderOportunidades());
+  }
+}
+
+// 🟢 Inicialização
+window.addEventListener('load', renderDashboard);

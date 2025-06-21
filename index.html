@@ -13,17 +13,21 @@
 
   <header class="bg-white dark:bg-gray-800 shadow p-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold text-violet-600">Sistema de Comissões</h1>
-    <nav class="flex gap-6">
-      <a href="#" onclick="renderDashboard()">Dashboard</a>
-      <a href="#" onclick="renderOportunidades()">Oportunidades</a>
-      <a href="#" onclick="renderPagamentos()">Pagamentos</a>
-      <a href="#" onclick="renderDespesas()">Despesas</a>
-    </nav>
-    <button onclick="toggleDarkMode()" class="bg-violet-500 text-white px-3 py-1 rounded">Dark Mode</button>
+    <div class="flex items-center gap-4">
+      <nav>
+        <ul class="flex space-x-4">
+          <li><a href="#" onclick="carregarDashboard()">Dashboard</a></li>
+          <li><a href="#" onclick="renderOportunidades()">Oportunidades</a></li>
+          <li><a href="#" onclick="renderPagamentos()">Pagamentos</a></li>
+          <li><a href="#" onclick="renderDespesas()">Despesas</a></li>
+        </ul>
+      </nav>
+      <button onclick="toggleDarkMode()" class="bg-violet-500 text-white px-2 py-1 rounded">Dark Mode</button>
+    </div>
   </header>
 
   <main class="p-6" id="app">
-    <!-- Conteúdo dinâmico aqui -->
+    <!-- Conteúdo dinâmico renderizado pelo JS -->
   </main>
 
   <footer class="bg-white dark:bg-gray-800 shadow p-4 text-center">

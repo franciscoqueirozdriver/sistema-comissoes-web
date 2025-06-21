@@ -1,4 +1,4 @@
-const API_URL = 'https://SEU_LINK_DA_API/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyyK01zS9CGJdb0ONaHcUAXp3Cp4Tz4BB5Hp85FdJxjx3zK4qZm7WGG4YzH3ugT5IE/exec';
 
 function toggleDarkMode() {
   document.documentElement.classList.toggle('dark');

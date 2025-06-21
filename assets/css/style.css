@@ -79,6 +79,7 @@ body.dark tr:nth-child(even) {
   background-color: #991b1b;
 }
 
+/* Modal */
 .modal {
   position: fixed;
   top: 0;
@@ -106,3 +107,15 @@ body.dark .modal-content {
   color: white;
 }
 
+input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 0.3rem;
+  width: 100%;
+}
+
+body.dark input {
+  background-color: #374151;
+  color: white;
+  border: 1px solid #555;
+}

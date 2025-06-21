@@ -138,7 +138,31 @@ function deletarOportunidade(id) {
   }
 }
 
-// ✅ Inicializa na tela de Oportunidades
+// ✅ Dashboard (Placeholder) — Mantém funcional
+function renderDashboard() {
+  document.getElementById('app').innerHTML = `
+    <h2 class="text-xl font-semibold mb-4">Painel (Dashboard)</h2>
+    <p class="text-gray-500">Dashboard em desenvolvimento.</p>
+  `;
+}
+
+// ✅ Pagamentos (Placeholder)
+function renderPagamentos() {
+  document.getElementById('app').innerHTML = `
+    <h2 class="text-xl font-semibold mb-4">Pagamentos</h2>
+    <p class="text-gray-500">Tela de pagamentos em desenvolvimento.</p>
+  `;
+}
+
+// ✅ Despesas (Placeholder)
+function renderDespesas() {
+  document.getElementById('app').innerHTML = `
+    <h2 class="text-xl font-semibold mb-4">Despesas</h2>
+    <p class="text-gray-500">Tela de despesas em desenvolvimento.</p>
+  `;
+}
+
+// ✅ Inicialização
 window.addEventListener('load', () => {
   renderOportunidades();
 });

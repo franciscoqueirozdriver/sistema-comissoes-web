@@ -1,45 +1,38 @@
-// 🔗 API
-const API_URL = 'https://script.google.com/macros/s/AKfycbyyK01zS9CGJdb0ONaHcUAXp3Cp4Tz4BB5Hp85FdJxjx3zK4qZm7WGG4YzH3ugT5IE/exec';
+// 🔗 Configure aqui o link da sua API
+const API_URL = 'https://script.google.com/macros/s/SEU_CODIGO_AQUI/exec';
 
-// 🔥 Dark Mode
+// ✅ Dark Mode
 function toggleDarkMode() {
   document.documentElement.classList.toggle('dark');
 }
 
-// 🚀 Funções API
+// ✅ Funções Genéricas da API
 async function apiGet(sheet) {
   const res = await fetch(`${API_URL}?sheet=${sheet}`);
   return await res.json();
 }
 
 async function apiPost(sheet, data) {
-  await fetch(API_URL, {
+  await fetch(`${API_URL}`, {
     method: 'POST',
     body: JSON.stringify({ sheet, ...data })
   });
 }
 
 async function apiDelete(sheet, id) {
-  await fetch(API_URL, {
+  await fetch(`${API_URL}`, {
     method: 'POST',
     body: JSON.stringify({ sheet, id, action: 'delete' })
   });
 }
 
-// 🏠 Dashboard
-async function renderDashboard() {
-  document.getElementById('app').innerHTML = `
-    <h2 class="text-xl font-semibold mb-4">Dashboard</h2>
-    <canvas id="graficoComissoes"></canvas>
-  `;
-  carregarDashboard();
-}
-
+// ✅ Função de Dashboard
 async function carregarDashboard() {
   const pagamentos = await apiGet('Pagamentos');
   const configuracoes = await apiGet('Configuracoes');
 
-  const orcado = parseFloat(configuracoes.find(c => c[0] === 'Orcado Mensal')[1]) || 8000;
+  const orcado = parseFloat(configuracoes.find(c => c[0] === 'orcado_mensal')?.[1] || 8000);
+
   const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
   const realizado = new Array(12).fill(0);
   const previsto = new Array(12).fill(orcado);
@@ -86,7 +79,7 @@ async function carregarDashboard() {
   });
 }
 
-// 🎯 CRUD Oportunidades com Formulário
+// ✅ CRUD de Oportunidades
 async function renderOportunidades() {
   const data = await apiGet('Oportunidades');
   const linhas = data.slice(1).map(o => `
@@ -95,8 +88,17 @@ async function renderOportunidades() {
       <td>${o[1]}</td>
       <td>${o[2]}</td>
       <td>${o[3]}</td>
+      <td>${o[4]}</td>
+      <td>${o[5]}</td>
+      <td>${o[6]}</td>
+      <td>${o[7]}</td>
+      <td>${o[8]}</td>
+      <td>${o[9]}</td>
+      <td>${o[10]}</td>
+      <td>${o[11]}</td>
+      <td>${o[12]}</td>
       <td>
-        <button class="btn" onclick="editarOportunidade(${o[0]}, '${o[1]}', '${o[2]}', '${o[3]}')">✏️ Editar</button>
+        <button class="btn" onclick="editarOportunidade(${o[0]})">✏️ Editar</button>
         <button class="btn btn-danger" onclick="deletarOportunidade(${o[0]})">🗑️ Excluir</button>
       </td>
     </tr>
@@ -104,67 +106,90 @@ async function renderOportunidades() {
 
   document.getElementById('app').innerHTML = `
     <h2 class="text-xl font-semibold mb-4">Oportunidades</h2>
-    <button class="btn mb-4" onclick="novaOportunidade()">+ Nova Oportunidade</button>
-    <table class="w-full table-auto border">
-      <thead><tr><th>ID</th><th>Empresa</th><th>Fonte</th><th>Fase</th><th>Ações</th></tr></thead>
+    <button class="btn mb-2" onclick="novaOportunidade()">+ Nova Oportunidade</button>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Empresa</th><th>Fonte</th><th>Fase do Funil</th>
+          <th>Data Entrada</th><th>Previsão Fechamento</th><th>Valor Implantação</th><th>Parcelas Implantação</th>
+          <th>Valor Mensalidade</th><th>Qtde Mensalidades</th><th>Data 1º Pgto Mensal</th><th>% Imposto</th><th>Observação</th><th>Ações</th>
+        </tr>
+      </thead>
       <tbody>${linhas}</tbody>
     </table>
   `;
 }
 
 function novaOportunidade() {
-  document.getElementById('app').innerHTML = `
-    <h2 class="text-xl mb-4">Nova Oportunidade</h2>
-    <div class="grid gap-4">
-      <input type="text" id="empresa" placeholder="Empresa">
-      <input type="text" id="fonte" placeholder="Fonte">
-      <input type="text" id="fase" placeholder="Fase do Funil">
-      <div class="flex gap-2">
-        <button class="btn" onclick="salvarNovaOportunidade()">Salvar</button>
-        <button class="btn btn-danger" onclick="renderOportunidades()">Cancelar</button>
-      </div>
-    </div>
-  `;
+  const empresa = prompt('Empresa:');
+  const fonte = prompt('Fonte:');
+  const fase = prompt('Fase do Funil:');
+  const data_entrada = prompt('Data de Entrada (AAAA-MM-DD):');
+  const previsao_fechamento = prompt('Previsão de Fechamento (AAAA-MM-DD):');
+  const valor_implantacao = prompt('Valor da Implantação:');
+  const parcelas_implantacao = prompt('Parcelas da Implantação:');
+  const valor_mensalidade = prompt('Valor da Mensalidade:');
+  const qtde_mensalidades = prompt('Quantidade de Mensalidades:');
+  const data_primeiro_pagamento_mensal = prompt('Data do 1º Pagamento Mensal (AAAA-MM-DD):');
+  const percentual_imposto = prompt('% Imposto (ex.: 0.19):');
+  const observacao = prompt('Observação:');
+
+  apiPost('Oportunidades', {
+    id: '',
+    empresa,
+    fonte,
+    fase_do_funil: fase,
+    data_entrada,
+    previsao_fechamento,
+    valor_implantacao,
+    parcelas_implantacao,
+    valor_mensalidade,
+    qtde_mensalidades,
+    data_primeiro_pagamento_mensal,
+    percentual_imposto,
+    observacao
+  }).then(() => renderOportunidades());
 }
 
-function salvarNovaOportunidade() {
-  const empresa = document.getElementById('empresa').value;
-  const fonte = document.getElementById('fonte').value;
-  const fase = document.getElementById('fase').value;
+function editarOportunidade(id) {
+  const empresa = prompt('Empresa:');
+  const fonte = prompt('Fonte:');
+  const fase = prompt('Fase do Funil:');
+  const data_entrada = prompt('Data de Entrada (AAAA-MM-DD):');
+  const previsao_fechamento = prompt('Previsão de Fechamento (AAAA-MM-DD):');
+  const valor_implantacao = prompt('Valor da Implantação:');
+  const parcelas_implantacao = prompt('Parcelas da Implantação:');
+  const valor_mensalidade = prompt('Valor da Mensalidade:');
+  const qtde_mensalidades = prompt('Quantidade de Mensalidades:');
+  const data_primeiro_pagamento_mensal = prompt('Data do 1º Pagamento Mensal (AAAA-MM-DD):');
+  const percentual_imposto = prompt('% Imposto (ex.: 0.19):');
+  const observacao = prompt('Observação:');
 
-  apiPost('Oportunidades', { id: '', empresa, fonte, fase })
-    .then(() => renderOportunidades());
-}
-
-function editarOportunidade(id, empresa, fonte, fase) {
-  document.getElementById('app').innerHTML = `
-    <h2 class="text-xl mb-4">Editar Oportunidade</h2>
-    <div class="grid gap-4">
-      <input type="text" id="empresa" value="${empresa}" placeholder="Empresa">
-      <input type="text" id="fonte" value="${fonte}" placeholder="Fonte">
-      <input type="text" id="fase" value="${fase}" placeholder="Fase do Funil">
-      <div class="flex gap-2">
-        <button class="btn" onclick="salvarEdicaoOportunidade(${id})">Salvar</button>
-        <button class="btn btn-danger" onclick="renderOportunidades()">Cancelar</button>
-      </div>
-    </div>
-  `;
-}
-
-function salvarEdicaoOportunidade(id) {
-  const empresa = document.getElementById('empresa').value;
-  const fonte = document.getElementById('fonte').value;
-  const fase = document.getElementById('fase').value;
-
-  apiPost('Oportunidades', { id, empresa, fonte, fase })
-    .then(() => renderOportunidades());
+  apiPost('Oportunidades', {
+    id,
+    empresa,
+    fonte,
+    fase_do_funil: fase,
+    data_entrada,
+    previsao_fechamento,
+    valor_implantacao,
+    parcelas_implantacao,
+    valor_mensalidade,
+    qtde_mensalidades,
+    data_primeiro_pagamento_mensal,
+    percentual_imposto,
+    observacao
+  }).then(() => renderOportunidades());
 }
 
 function deletarOportunidade(id) {
-  if (confirm('Deseja realmente excluir essa oportunidade?')) {
+  if (confirm('Deseja realmente excluir?')) {
     apiDelete('Oportunidades', id).then(() => renderOportunidades());
   }
 }
 
-// 🟢 Inicialização
-window.addEventListener('load', renderDashboard);
+// ✅ Inicialização
+window.addEventListener('load', () => {
+  console.log('JS carregado');
+  carregarDashboard();
+});

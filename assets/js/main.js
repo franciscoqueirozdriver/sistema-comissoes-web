@@ -1,6 +1,7 @@
 // 🔗 Link da API
 const API_URL = 'https://script.google.com/macros/s/AKfycbyyK01zS9CGJdb0ONaHcUAXp3Cp4Tz4BB5Hp85FdJxjx3zK4qZm7WGG4YzH3ugT5IE/exec';
 
+
 // ✅ Dark Mode
 function toggleDarkMode() {
   document.documentElement.classList.toggle('dark');
@@ -69,7 +70,7 @@ async function renderOportunidades() {
   `;
 }
 
-// ✅ Modal - Formulário
+// ✅ Modal - Formulário de Oportunidades
 async function abrirModalOportunidade(id = '') {
   const data = await apiGet('Oportunidades');
   const item = data.find(o => o[0] == id) || ['', '', '', '', '', '', '', '', '', '', '', '', ''];
@@ -138,12 +139,79 @@ function deletarOportunidade(id) {
   }
 }
 
-// ✅ Dashboard (Placeholder) — Mantém funcional
-function renderDashboard() {
+// ✅ Dashboard Funcional
+async function renderDashboard() {
+  const pagamentos = await apiGet('Pagamentos');
+  const configuracoes = await apiGet('Configuracoes');
+
+  const orcado = parseFloat(configuracoes.find(c => c[0] === 'Orcado Mensal')?.[1]) || 8000;
+
+  const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+  const realizado = new Array(12).fill(0);
+  const previsto = new Array(12).fill(orcado);
+
+  let totalRecebido = 0;
+  let totalPrevisto = 0;
+
+  pagamentos.slice(1).forEach(p => {
+    const data = new Date(p[7]);
+    if (!isNaN(data)) {
+      const mes = data.getMonth();
+      const status = p[9];
+      const valor = parseFloat(p[4]);
+      if (status === 'Recebido') {
+        realizado[mes] += valor;
+        totalRecebido += valor;
+      } else {
+        totalPrevisto += valor;
+      }
+    }
+  });
+
+  const percentual = totalPrevisto > 0 ? Math.round((totalRecebido / (totalRecebido + totalPrevisto)) * 100) : 100;
+
   document.getElementById('app').innerHTML = `
     <h2 class="text-xl font-semibold mb-4">Painel (Dashboard)</h2>
-    <p class="text-gray-500">Dashboard em desenvolvimento.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="card"><p class="text-sm text-gray-500">Recebido</p><p class="value">R$ ${totalRecebido.toLocaleString()}</p></div>
+      <div class="card"><p class="text-sm text-gray-500">Previsto</p><p class="value">R$ ${totalPrevisto.toLocaleString()}</p></div>
+      <div class="card"><p class="text-sm text-gray-500">% Realizado</p><p class="value">${percentual}%</p></div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 p-4 rounded shadow">
+      <canvas id="graficoComissoes"></canvas>
+    </div>
   `;
+
+  const ctx = document.getElementById('graficoComissoes').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: meses,
+      datasets: [
+        {
+          label: 'Realizado',
+          data: realizado,
+          backgroundColor: 'rgba(139, 92, 246, 0.7)'
+        },
+        {
+          type: 'line',
+          label: 'Orçado',
+          data: previsto,
+          borderColor: 'rgba(139, 92, 246, 1)',
+          borderWidth: 2,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
 }
 
 // ✅ Pagamentos (Placeholder)

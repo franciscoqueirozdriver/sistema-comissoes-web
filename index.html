@@ -16,8 +16,8 @@
     <div class="flex items-center gap-4">
       <nav>
         <ul class="flex space-x-4">
-          <li><a href="#" onclick="renderDashboard()">Dashboard</a></li>
           <li><a href="#" onclick="renderOportunidades()">Oportunidades</a></li>
+          <li><a href="#" onclick="renderDashboard()">Dashboard</a></li>
           <li><a href="#" onclick="renderPagamentos()">Pagamentos</a></li>
           <li><a href="#" onclick="renderDespesas()">Despesas</a></li>
         </ul>
@@ -27,8 +27,10 @@
   </header>
 
   <main class="p-6" id="app">
-    <!-- Conteúdo dinâmico renderizado pelo JS -->
+    <!-- Conteúdo dinâmico -->
   </main>
+
+  <div id="modal"></div>
 
   <footer class="bg-white dark:bg-gray-800 shadow p-4 text-center">
     <p class="text-sm text-gray-500">&copy; 2025 Sistema de Comissões. Todos os direitos reservados.</p>

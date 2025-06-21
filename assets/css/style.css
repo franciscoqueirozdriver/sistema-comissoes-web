@@ -31,14 +31,50 @@ body.dark .select {
   color: white;
 }
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 6px;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+th {
+  background-color: #eee;
+}
+
+body.dark th {
+  background-color: #333;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+body.dark tr:nth-child(even) {
+  background-color: #222;
+}
+
 .btn {
-  @apply bg-violet-600 text-white px-3 py-1 rounded hover:bg-violet-700;
+  background-color: #7c3aed;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #5b21b6;
 }
 
 .btn-danger {
-  @apply bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700;
+  background-color: #dc2626;
 }
 
-input, select {
-  @apply border rounded px-2 py-1 w-full;
+.btn-danger:hover {
+  background-color: #991b1b;
 }

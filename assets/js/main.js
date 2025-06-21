@@ -1,5 +1,5 @@
 // 🔗 Configure aqui o link da sua API
-const API_URL = 'https://script.google.com/macros/s/AKfycbyyK01zS9CGJdb0ONaHcUAXp3Cp4Tz4BB5Hp85FdJxjx3zK4qZm7WGG4YzH3ugT5IE/exec';
+const API_URL = 'https://script.google.com/macros/s/SEU_CODIGO_AQUI/exec';
 
 // ✅ Dark Mode
 function toggleDarkMode() {
@@ -26,6 +26,39 @@ async function apiDelete(sheet, id) {
   });
 }
 
+// ✅ Renderização da Interface do Dashboard
+function renderDashboard() {
+  document.getElementById('app').innerHTML = `
+    <h2 class="text-xl font-semibold mb-4">Painel (Dashboard)</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="card"><p class="text-sm text-gray-500">Recebido</p><p id="cardRecebido" class="value">R$ 0</p></div>
+      <div class="card"><p class="text-sm text-gray-500">Previsto</p><p id="cardPrevisto" class="value">R$ 0</p></div>
+      <div class="card"><p class="text-sm text-gray-500">% Realizado</p><p id="cardRealizado" class="value">0%</p></div>
+    </div>
+
+    <div class="flex gap-4 mb-4">
+      <label for="anoSelect">Ano:</label>
+      <select id="anoSelect" class="select">
+        <option value="2024">2024</option>
+        <option value="2025" selected>2025</option>
+      </select>
+      <label for="tipoSelect">Tipo:</label>
+      <select id="tipoSelect" class="select">
+        <option value="Todos">Todos</option>
+        <option value="Implantacao">Implantação</option>
+        <option value="Mensalidade">Mensalidade</option>
+      </select>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 p-4 rounded shadow">
+      <canvas id="graficoComissoes"></canvas>
+    </div>
+  `;
+
+  carregarDashboard();
+}
+
 // ✅ Função de Dashboard
 async function carregarDashboard() {
   const pagamentos = await apiGet('Pagamentos');
@@ -37,6 +70,9 @@ async function carregarDashboard() {
   const realizado = new Array(12).fill(0);
   const previsto = new Array(12).fill(orcado);
 
+  let totalRecebido = 0;
+  let totalPrevisto = 0;
+
   pagamentos.slice(1).forEach(p => {
     const data = new Date(p[7]);
     if (!isNaN(data)) {
@@ -45,9 +81,20 @@ async function carregarDashboard() {
       const valor = parseFloat(p[4]);
       if (status === 'Recebido') {
         realizado[mes] += valor;
+        totalRecebido += valor;
+      } else {
+        totalPrevisto += valor;
       }
     }
   });
+
+  const percentual = totalPrevisto + totalRecebido > 0
+    ? Math.round((totalRecebido / (totalRecebido + totalPrevisto)) * 100)
+    : 100;
+
+  document.getElementById('cardRecebido').innerText = `R$ ${totalRecebido.toLocaleString()}`;
+  document.getElementById('cardPrevisto').innerText = `R$ ${totalPrevisto.toLocaleString()}`;
+  document.getElementById('cardRealizado').innerText = `${percentual}%`;
 
   const ctx = document.getElementById('graficoComissoes').getContext('2d');
   new Chart(ctx, {
@@ -191,5 +238,5 @@ function deletarOportunidade(id) {
 // ✅ Inicialização
 window.addEventListener('load', () => {
   console.log('JS carregado');
-  carregarDashboard();
+  renderDashboard();
 });

@@ -1,4 +1,4 @@
-const API_URL = 'https://script.google.com/macros/s/SEU_CODIGO_AQUI/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyyK01zS9CGJdb0ONaHcUAXp3Cp4Tz4BB5Hp85FdJxjx3zK4qZm7WGG4YzH3ugT5IE/exec';
 
 let grafico = null;
 

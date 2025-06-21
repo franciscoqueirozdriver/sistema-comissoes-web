@@ -28,6 +28,17 @@ async function apiDelete(sheet, id) {
   return await res.json();
 }
 
+// ✅ Renderiza o Dashboard e cria o canvas
+function renderDashboard() {
+  document.getElementById('app').innerHTML = `
+    <h2 class="text-xl font-semibold mb-4">Painel (Dashboard)</h2>
+    <div class="bg-white dark:bg-gray-800 p-4 rounded shadow">
+      <canvas id="graficoComissoes"></canvas>
+    </div>
+  `;
+  carregarDashboard();
+}
+
 // ✅ Dashboard
 async function carregarDashboard() {
   const pagamentos = await apiGet('Pagamentos');
@@ -229,6 +240,5 @@ function deletarDespesa(id) {
 // ✅ Inicialização
 window.addEventListener('load', () => {
   console.log('JS carregado');
-  carregarDashboard();
+  renderDashboard();
 });
-

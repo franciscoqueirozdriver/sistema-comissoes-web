@@ -6,6 +6,9 @@ function toggleDarkMode() {
   document.documentElement.classList.toggle('dark');
 }
 
+// ✅ Variável global para controle do gráfico
+let grafico = null;
+
 // ✅ Funções Genéricas da API
 async function apiGet(sheet) {
   const res = await fetch(`${API_URL}?sheet=${sheet}`);
@@ -63,7 +66,12 @@ async function carregarDashboard() {
   });
 
   const ctx = document.getElementById('graficoComissoes').getContext('2d');
-  new Chart(ctx, {
+
+  if (grafico) {
+    grafico.destroy();
+  }
+
+  grafico = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: meses,
@@ -237,7 +245,7 @@ function deletarDespesa(id) {
   }
 }
 
-// ✅ Inicialização
+// ✅ Inicialização padrão — já carrega o Dashboard ao abrir
 window.addEventListener('load', () => {
   console.log('JS carregado');
   renderDashboard();

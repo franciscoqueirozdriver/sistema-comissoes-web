@@ -1,15 +1,13 @@
-// 🔗 Configure aqui o link da sua API
-const API_URL = 'https://script.google.com/macros/s/AKfycbyyK01zS9CGJdb0ONaHcUAXp3Cp4Tz4BB5Hp85FdJxjx3zK4qZm7WGG4YzH3ugT5IE/exec';
+const API_URL = 'https://script.google.com/macros/s/SEU_CODIGO_AQUI/exec';
 
-// ✅ Dark Mode
+let grafico = null;
+
+// Dark Mode
 function toggleDarkMode() {
   document.documentElement.classList.toggle('dark');
 }
 
-// ✅ Variável global para controle do gráfico
-let grafico = null;
-
-// ✅ Funções Genéricas da API
+// API Functions
 async function apiGet(sheet) {
   const res = await fetch(`${API_URL}?sheet=${sheet}`);
   return await res.json();
@@ -31,7 +29,7 @@ async function apiDelete(sheet, id) {
   return await res.json();
 }
 
-// ✅ Renderiza o Dashboard e cria o canvas
+// Render Dashboard + Canvas
 function renderDashboard() {
   document.getElementById('app').innerHTML = `
     <h2 class="text-xl font-semibold mb-4">Painel (Dashboard)</h2>
@@ -42,8 +40,20 @@ function renderDashboard() {
   carregarDashboard();
 }
 
-// ✅ Dashboard
+// Dashboard com proteção de canvas
 async function carregarDashboard() {
+  const canvas = document.getElementById('graficoComissoes');
+  if (!canvas) {
+    console.error('Canvas não encontrado. Você precisa rodar renderDashboard() antes.');
+    return;
+  }
+
+  const ctx = canvas.getContext('2d');
+
+  if (grafico) {
+    grafico.destroy();
+  }
+
   const pagamentos = await apiGet('Pagamentos');
   const configuracoes = await apiGet('Configuracoes');
 
@@ -64,12 +74,6 @@ async function carregarDashboard() {
       }
     }
   });
-
-  const ctx = document.getElementById('graficoComissoes').getContext('2d');
-
-  if (grafico) {
-    grafico.destroy();
-  }
 
   grafico = new Chart(ctx, {
     type: 'bar',
@@ -100,7 +104,7 @@ async function carregarDashboard() {
   });
 }
 
-// ✅ CRUD de Oportunidades
+// Oportunidades
 async function renderOportunidades() {
   const data = await apiGet('Oportunidades');
   const linhas = data.slice(1).map(o => `
@@ -158,7 +162,7 @@ function deletarOportunidade(id) {
   }
 }
 
-// ✅ CRUD de Pagamentos
+// Pagamentos
 async function renderPagamentos() {
   const data = await apiGet('Pagamentos');
   const linhas = data.slice(1).map(p => `
@@ -198,7 +202,7 @@ function deletarPagamento(id) {
   }
 }
 
-// ✅ CRUD de Despesas
+// Despesas
 async function renderDespesas() {
   const data = await apiGet('Despesas');
   const linhas = data.slice(1).map(d => `
@@ -245,8 +249,7 @@ function deletarDespesa(id) {
   }
 }
 
-// ✅ Inicialização padrão — já carrega o Dashboard ao abrir
+// 🚀 Ao carregar a página já exibe o Dashboard
 window.addEventListener('load', () => {
-  console.log('JS carregado');
   renderDashboard();
 });

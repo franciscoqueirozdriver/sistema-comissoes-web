@@ -1,1 +1,16 @@
-
+{
+  "name": "sistema-comissoes-web",
+  "version": "1.0.0",
+  "description": "API e Frontend para controle de comissões integrados ao Google Sheets",
+  "main": "api/index.js",
+  "scripts": {
+    "dev": "node api/index.js",
+    "start": "node api/index.js"
+  },
+  "author": "Francisco",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0",
+    "googleapis": "^105.0.0"
+  }
+}

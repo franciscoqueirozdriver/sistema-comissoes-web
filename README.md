@@ -1,14 +1,21 @@
 # Sistema de Comissões Web
 
-Projeto para gestão de oportunidades, pagamentos, despesas e outras receitas com integração ao Google Sheets.
+Aplicação Next.js integrada com Google Sheets para gerenciamento de oportunidades, pagamentos, despesas e outras receitas.
 
-## Scripts Disponíveis
-- `npm run dev`: Executa em modo desenvolvimento
-- `npm run build`: Cria build de produção
-- `npm start`: Inicia servidor em produção
+## Funcionalidades
 
-## Estrutura
-- `pages/api/`: Endpoints da API
-- `utils/`: Funções auxiliares
-- `public/`: Arquivos estáticos
-- `styles/`: CSS global
+- API RESTful com endpoints para:
+  - Oportunidades
+  - Pagamentos
+  - Outras Receitas
+  - Despesas
+  - Configurações (dropdowns)
+
+- Conexão segura com Google Sheets usando credenciais da conta de serviço
+
+## Scripts
+
+```bash
+npm run dev       # Desenvolvimento local
+npm run build     # Build de produção
+npm run start     # Start do build em produção

@@ -11,24 +11,32 @@ export default function Home() {
       </h1>
 
       <div className="max-w-4xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <Link href="/oportunidades" className="block p-6 bg-white rounded-xl shadow hover:shadow-md transition">
-          <h2 className="text-xl font-semibold text-purple-700">Oportunidades</h2>
-          <p className="text-sm text-gray-600">Gerencie oportunidades e vendas</p>
+        <Link href="/oportunidades">
+          <a className="block p-6 bg-white rounded-xl shadow hover:shadow-md transition">
+            <h2 className="text-xl font-semibold text-purple-700">Oportunidades</h2>
+            <p className="text-sm text-gray-600">Gerencie oportunidades e vendas</p>
+          </a>
         </Link>
 
-        <Link href="/pagamentos" className="block p-6 bg-white rounded-xl shadow hover:shadow-md transition">
-          <h2 className="text-xl font-semibold text-purple-700">Pagamentos</h2>
-          <p className="text-sm text-gray-600">Visualize e controle os pagamentos</p>
+        <Link href="/pagamentos">
+          <a className="block p-6 bg-white rounded-xl shadow hover:shadow-md transition">
+            <h2 className="text-xl font-semibold text-purple-700">Pagamentos</h2>
+            <p className="text-sm text-gray-600">Visualize e controle os pagamentos</p>
+          </a>
         </Link>
 
-        <Link href="/despesas" className="block p-6 bg-white rounded-xl shadow hover:shadow-md transition">
-          <h2 className="text-xl font-semibold text-purple-700">Despesas</h2>
-          <p className="text-sm text-gray-600">Registre e acompanhe despesas</p>
+        <Link href="/despesas">
+          <a className="block p-6 bg-white rounded-xl shadow hover:shadow-md transition">
+            <h2 className="text-xl font-semibold text-purple-700">Despesas</h2>
+            <p className="text-sm text-gray-600">Registre e acompanhe despesas</p>
+          </a>
         </Link>
 
-        <Link href="/outras-receitas" className="block p-6 bg-white rounded-xl shadow hover:shadow-md transition">
-          <h2 className="text-xl font-semibold text-purple-700">Outras Receitas</h2>
-          <p className="text-sm text-gray-600">Lançamentos avulsos de receita</p>
+        <Link href="/outras-receitas">
+          <a className="block p-6 bg-white rounded-xl shadow hover:shadow-md transition">
+            <h2 className="text-xl font-semibold text-purple-700">Outras Receitas</h2>
+            <p className="text-sm text-gray-600">Lançamentos avulsos de receita</p>
+          </a>
         </Link>
       </div>
     </div>

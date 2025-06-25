@@ -1,47 +1,36 @@
 // pages/index.js
-import Head from 'next/head';
+
 import Link from 'next/link';
+import '@/styles/globals.css';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white">
-      <Head>
-        <title>Sistema de Comissões</title>
-      </Head>
+    <div className="min-h-screen bg-gray-50 py-10 px-6">
+      <h1 className="text-3xl font-bold text-center text-purple-800 mb-10">
+        Sistema de Comissões
+      </h1>
 
-      <header className="bg-violet-600 text-white p-4 shadow">
-        <h1 className="text-2xl font-semibold">Sistema de Comissões</h1>
-      </header>
-
-      <main className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Link href="/oportunidades">
-          <div className="cursor-pointer bg-white dark:bg-gray-800 p-4 rounded-xl shadow hover:shadow-md transition">
-            <h2 className="text-lg font-medium">Oportunidades</h2>
-            <p className="text-sm">Gerencie oportunidades e vendas</p>
-          </div>
+      <div className="max-w-4xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <Link href="/oportunidades" className="block p-6 bg-white rounded-xl shadow hover:shadow-md transition">
+          <h2 className="text-xl font-semibold text-purple-700">Oportunidades</h2>
+          <p className="text-sm text-gray-600">Gerencie oportunidades e vendas</p>
         </Link>
 
-        <Link href="/pagamentos">
-          <div className="cursor-pointer bg-white dark:bg-gray-800 p-4 rounded-xl shadow hover:shadow-md transition">
-            <h2 className="text-lg font-medium">Pagamentos</h2>
-            <p className="text-sm">Visualize e controle os pagamentos</p>
-          </div>
+        <Link href="/pagamentos" className="block p-6 bg-white rounded-xl shadow hover:shadow-md transition">
+          <h2 className="text-xl font-semibold text-purple-700">Pagamentos</h2>
+          <p className="text-sm text-gray-600">Visualize e controle os pagamentos</p>
         </Link>
 
-        <Link href="/despesas">
-          <div className="cursor-pointer bg-white dark:bg-gray-800 p-4 rounded-xl shadow hover:shadow-md transition">
-            <h2 className="text-lg font-medium">Despesas</h2>
-            <p className="text-sm">Registre e acompanhe despesas</p>
-          </div>
+        <Link href="/despesas" className="block p-6 bg-white rounded-xl shadow hover:shadow-md transition">
+          <h2 className="text-xl font-semibold text-purple-700">Despesas</h2>
+          <p className="text-sm text-gray-600">Registre e acompanhe despesas</p>
         </Link>
 
-        <Link href="/outras-receitas">
-          <div className="cursor-pointer bg-white dark:bg-gray-800 p-4 rounded-xl shadow hover:shadow-md transition">
-            <h2 className="text-lg font-medium">Outras Receitas</h2>
-            <p className="text-sm">Lançamentos avulsos de receita</p>
-          </div>
+        <Link href="/outras-receitas" className="block p-6 bg-white rounded-xl shadow hover:shadow-md transition">
+          <h2 className="text-xl font-semibold text-purple-700">Outras Receitas</h2>
+          <p className="text-sm text-gray-600">Lançamentos avulsos de receita</p>
         </Link>
-      </main>
+      </div>
     </div>
   );
 }

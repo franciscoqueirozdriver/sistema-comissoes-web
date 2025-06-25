@@ -1,8 +1,8 @@
 export default function Home() {
   return (
-    <div>
+    <div style={{ fontFamily: 'Arial', padding: '2rem' }}>
       <h1>Sistema de Comissões</h1>
-      <p>Bem-vindo ao painel!</p>
+      <p>API funcionando corretamente. Acesse os endpoints via <code>/api/</code></p>
     </div>
   );
 }
